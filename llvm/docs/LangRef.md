@@ -2836,6 +2836,23 @@ fn -> other_fn -> other_fn ; fn is norecurse
     function which has an `ssp` or `sspstrong` attribute, the calling
     function's attribute will be upgraded to `sspreq`.
 
+`"stack-protector-layout-only"`
+:   This attribute is only meaningful in conjunction with `ssp`, `sspstrong`
+    or `sspreq`. It indicates that only the stack protector layout is applied
+    and no stack protector is inserted: the variables that the `ssp`,
+    `sspstrong` or `sspreq` heuristic identifies as requiring a protector are
+    arranged on the stack following the layout rules described for
+    `sspstrong`, but no guard is stored or checked and no stack protector
+    runtime functions are referenced. This is intended for targets that
+    protect the return address by other means, such as in hardware. The
+    attribute has no effect on functions with the `safestack` attribute or
+    with a funclet-based exception handling personality.
+
+    If a function with this attribute is inlined into a calling function, the
+    attribute is not carried over to the calling function. The calling
+    function keeps its own attribute, while its `ssp`, `sspstrong` or `sspreq`
+    attribute is upgraded as described above.
+
 (strictfp)=
 
 `strictfp`

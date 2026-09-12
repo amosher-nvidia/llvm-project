@@ -291,6 +291,10 @@ private:
   /// The frame index for the stack protector.
   int StackProtectorIdx = -1;
 
+  /// True if the stack protector layout is applied to the protected objects
+  /// although no stack protector object exists.
+  bool StackProtectorLayoutOnly = false;
+
   /// The frame index for the function context. Used for SjLj exceptions.
   int FunctionContextIdx = -1;
 
@@ -378,6 +382,13 @@ public:
   int getStackProtectorIndex() const { return StackProtectorIdx; }
   void setStackProtectorIndex(int I) { StackProtectorIdx = I; }
   bool hasStackProtectorIndex() const { return StackProtectorIdx != -1; }
+
+  /// Return true if the protected stack objects are laid out as with a stack
+  /// protector although the function has no stack protector object.
+  bool hasStackProtectorLayoutOnly() const { return StackProtectorLayoutOnly; }
+  void setStackProtectorLayoutOnly(bool B = true) {
+    StackProtectorLayoutOnly = B;
+  }
 
   /// Return the index for the function context object.
   /// This object is used for SjLj exceptions.

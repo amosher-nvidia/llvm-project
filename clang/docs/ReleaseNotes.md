@@ -239,6 +239,15 @@ features cannot lower the translation-unit ABI level;
 - New option `-fdefined-pointer-subtraction` added to preserve stable semantics
   when subtracting pointers to unrelated objects.
 
+- Added `-fstack-protector-layout-only`. With it, only the stack protector
+  layout of `-fstack-protector`, `-fstack-protector-strong` and
+  `-fstack-protector-all` is applied (arrays and address-taken variables are
+  placed above the other locals); no stack protector is inserted. This is for
+  targets whose return address is protected by other means such as hardware.
+  It implies at least `-fstack-protector`; `-fstack-protector-strong` and
+  `-fstack-protector-all` raise the level, and `-fno-stack-protector` does not
+  disable it.
+
 - Added `--print-cxx-stdlib` and `--print-cxx-stdlib-include-dirs` to print
   the C++ standard library selected by the driver and the include directories
   added for it.

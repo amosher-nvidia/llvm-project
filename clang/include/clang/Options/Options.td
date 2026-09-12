@@ -4585,6 +4585,12 @@ defm split_stack : BoolFOption<"split-stack",
   PosFlag<SetTrue, [], [ClangOption, CC1Option], "Use segmented stack">>;
 def fstack_protector_all : Flag<["-"], "fstack-protector-all">, Group<f_Group>,
   HelpText<"Enable stack protectors for all functions">;
+defm stack_protector_layout_only : BoolFOption<"stack-protector-layout-only",
+  CodeGenOpts<"StackProtectorLayoutOnly">, DefaultFalse,
+  PosFlag<SetTrue, [], [ClangOption, CC1Option],
+          "Apply only the stack protector layout and insert no stack protectors">,
+  NegFlag<SetFalse, [], [ClangOption],
+          "Insert stack protectors when the stack protector layout is applied">>;
 defm stack_clash_protection : BoolFOption<"stack-clash-protection",
   CodeGenOpts<"StackClashProtector">, DefaultFalse,
   PosFlag<SetTrue, [], [ClangOption, CC1Option], "Enable">,

@@ -3503,6 +3503,7 @@ ItaniumCXXABI::getOrCreateVirtualFunctionPointerThunk(const CXXMethodDecl *MD) {
   ThunkFn->removeFnAttr(llvm::Attribute::StackProtect);
   ThunkFn->removeFnAttr(llvm::Attribute::StackProtectStrong);
   ThunkFn->removeFnAttr(llvm::Attribute::StackProtectReq);
+  ThunkFn->removeFnAttr("stack-protector-layout-only");
 
   // Start codegen.
   CodeGenFunction CGF(CGM);

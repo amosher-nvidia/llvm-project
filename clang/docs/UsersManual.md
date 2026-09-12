@@ -2954,6 +2954,21 @@ such as kernels and boot loaders, that performs pointer arithmetic over
 externally defined memory layouts rather than ordinary C or C++ objects.
 :::
 
+:::{option} -f[no-]stack-protector-layout-only
+
+Only apply the stack protector layout of `-fstack-protector`,
+`-fstack-protector-strong` and `-fstack-protector-all`, which places arrays and
+variables whose address is taken above the other local variables; no stack
+protector is inserted, so no guard is stored or checked and the stack protector
+runtime is not referenced. This is intended for targets whose return address is
+protected by other means, such as hardware.
+
+The option implies at least `-fstack-protector`; `-fstack-protector-strong` and
+`-fstack-protector-all` still select which variables the layout places above
+the others. `-fno-stack-protector` does not disable it; use
+`-fno-stack-protector-layout-only` for that.
+:::
+
 (strict_aliasing)=
 (strict-aliasing)=
 

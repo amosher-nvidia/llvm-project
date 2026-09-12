@@ -55,3 +55,29 @@
 // RUN: %clang -ffreestanding -target x86_64-apple-darwin10 -mmacos-version-min=10.6 -### %s 2>&1 | FileCheck %s -check-prefix=SSP_MACOSX_10_6_KERNEL
 // SSP_MACOSX_10_6_KERNEL: "-stack-protector" "1"
 
+// -fstack-protector-layout-only implies at least -fstack-protector, is raised
+// by -fstack-protector-strong/-all, and is not cancelled by -fno-stack-protector.
+
+// RUN: %clang --target=x86_64-unknown-linux-gnu -fstack-protector-layout-only -### %s 2>&1 | FileCheck %s -check-prefix=SSP-LAYOUT-ONLY
+// RUN: %clang --target=x86_64-unknown-linux-gnu -fno-stack-protector -fstack-protector-layout-only -### %s 2>&1 | FileCheck %s -check-prefix=SSP-LAYOUT-ONLY
+// RUN: %clang --target=x86_64-unknown-linux-gnu -fstack-protector-layout-only -fno-stack-protector -### %s 2>&1 | FileCheck %s -check-prefix=SSP-LAYOUT-ONLY
+// SSP-LAYOUT-ONLY: "-stack-protector" "1" "-fstack-protector-layout-only"
+
+// RUN: %clang --target=x86_64-unknown-linux-gnu -fstack-protector-layout-only -fstack-protector-strong -### %s 2>&1 | FileCheck %s -check-prefix=SSP-LAYOUT-ONLY-STRONG
+// SSP-LAYOUT-ONLY-STRONG: "-stack-protector" "2" "-fstack-protector-layout-only"
+
+// RUN: %clang --target=x86_64-unknown-linux-gnu -fstack-protector-all -fstack-protector-layout-only -### %s 2>&1 | FileCheck %s -check-prefix=SSP-LAYOUT-ONLY-ALL
+// SSP-LAYOUT-ONLY-ALL: "-stack-protector" "3" "-fstack-protector-layout-only"
+
+// RUN: %clang --target=i386-pc-openbsd -fstack-protector-layout-only -### %s 2>&1 | FileCheck %s -check-prefix=SSP-LAYOUT-ONLY-OPENBSD
+// SSP-LAYOUT-ONLY-OPENBSD: "-stack-protector" "2" "-fstack-protector-layout-only"
+
+// RUN: %clang --target=x86_64-unknown-linux-gnu -fstack-protector-layout-only -fno-stack-protector-layout-only -### %s 2>&1 | FileCheck %s -check-prefix=NO-SSP-LAYOUT-ONLY
+// NO-SSP-LAYOUT-ONLY-NOT: "-stack-protector"
+// NO-SSP-LAYOUT-ONLY-NOT: "-fstack-protector-layout-only"
+
+// RUN: %clang --target=bpf -fstack-protector-layout-only -### %s 2>&1 | FileCheck %s -check-prefix=SSP-LAYOUT-ONLY-BPF
+// SSP-LAYOUT-ONLY-BPF: warning: ignoring '-fstack-protector-layout-only' option as it is not currently supported for target 'bpf'
+// SSP-LAYOUT-ONLY-BPF-NOT: "-stack-protector"
+// SSP-LAYOUT-ONLY-BPF-NOT: "-fstack-protector-layout-only"
+

@@ -52,6 +52,10 @@ Makes programs 10x faster by doing Special New Thing.
 
 ### Changes to the LLVM IR
 
+* Added the `"stack-protector-layout-only"` function attribute. Combined with
+  `ssp`, `sspstrong` or `sspreq`, only the stack protector layout is applied;
+  no stack protector is inserted.
+
 * LLVM now assigns persistent print IDs to metadata nodes. Reusing these IDs
   avoids repeated module-wide scans to rebuild metadata numbering, which can
   significantly speed up debug and pass printing on large modules. Keeping
@@ -263,6 +267,11 @@ Makes programs 10x faster by doing Special New Thing.
 ### Changes to the C API
 
 ### Changes to the CodeGen infrastructure
+
+* `MachineFrameInfo` gained a `stackProtectorLayoutOnly` flag, serialized in
+  MIR, which makes the prolog/epilog inserter and local stack slot allocation
+  apply the stack protector layout to the protected stack objects even when no
+  stack protector object exists.
 
 * Fixed a crash
   ([#214750](https://github.com/llvm/llvm-project/issues/214750)) when
