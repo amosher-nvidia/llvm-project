@@ -731,6 +731,7 @@ struct MachineFrameInfo {
   bool HasCalls = false;
   FramePointerKind FramePointerPolicy = FramePointerKind::None;
   StringValue StackProtector;
+  bool StackProtectorLayoutOnly = false;
   StringValue FunctionContext;
   unsigned MaxCallFrameSize = ~0u; ///< ~0u means: not computed yet.
   unsigned CVBytesOfCalleeSavedRegisters = 0;
@@ -754,6 +755,7 @@ struct MachineFrameInfo {
            AdjustsStack == Other.AdjustsStack && HasCalls == Other.HasCalls &&
            FramePointerPolicy == Other.FramePointerPolicy &&
            StackProtector == Other.StackProtector &&
+           StackProtectorLayoutOnly == Other.StackProtectorLayoutOnly &&
            FunctionContext == Other.FunctionContext &&
            MaxCallFrameSize == Other.MaxCallFrameSize &&
            CVBytesOfCalleeSavedRegisters ==
@@ -783,6 +785,8 @@ template <> struct MappingTraits<MachineFrameInfo> {
     YamlIO.mapOptional("framePointerPolicy", MFI.FramePointerPolicy);
     YamlIO.mapOptional("stackProtector", MFI.StackProtector,
                        StringValue()); // Don't print it out when it's empty.
+    YamlIO.mapOptional("stackProtectorLayoutOnly", MFI.StackProtectorLayoutOnly,
+                       false);
     YamlIO.mapOptional("functionContext", MFI.FunctionContext,
                        StringValue()); // Don't print it out when it's empty.
     YamlIO.mapOptional("maxCallFrameSize", MFI.MaxCallFrameSize, (unsigned)~0);
